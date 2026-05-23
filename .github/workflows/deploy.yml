@@ -1,0 +1,26 @@
+name: Deploy to Netlify
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: 14a5899b-1191-4015-9dee-cd4e77281df9
+        run: |
+          zip -r deploy.zip \
+            index.html shared.css favicon.svg \
+            sitemap.xml privacy-policy.html terms.html
+          curl -s -X POST \
+            -H "Authorization: Bearer $NETLIFY_TOKEN" \
+            -H "Content-Type: application/zip" \
+            --data-binary @deploy.zip \
+            "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID/deploys" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print('Deploy:', d.get('state','?'), d.get('id',''))"
