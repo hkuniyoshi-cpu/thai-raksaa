@@ -598,6 +598,33 @@ section {
   grid-template-columns: repeat(3, 1fr);
   gap: 22px;
 }
+/* スケルトンローダー — CMS ロード前のプレースホルダー */
+.menu-skel {
+  background: #181818;
+  border: 1px solid rgba(201,168,76,.08);
+  border-radius: 2px;
+  min-height: 230px;
+  position: relative;
+  overflow: hidden;
+}
+.menu-skel::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201,168,76,.07) 40%,
+    rgba(201,168,76,.12) 50%,
+    rgba(201,168,76,.07) 60%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: skel-shimmer 2s ease-in-out infinite;
+}
+@keyframes skel-shimmer {
+  0%   { background-position: 250% 0; }
+  100% { background-position: -250% 0; }
+}
 .menu-card {
   position: relative;
   background: linear-gradient(180deg, #1F1F1F, #161616);
