@@ -213,51 +213,14 @@
       <h2 class="section-title"><em>選び抜いた</em>6つのメニュー</h2>
       <p class="section-subtitle">コ ー ス ・ メ ニ ュ ー</p>
     </div>
-    <div class="menu-grid reveal-stagger cms-pending" id="menuGrid">
-      <article class="menu-card">
-        <span class="badge">Best Seller</span>
-        <span class="num">No. 01</span>
-        <h3 class="name-jp">タイ古式マッサージ 60分</h3>
-        <div class="name-en">Traditional Thai Massage · 60min</div>
-        <div class="price-row"><span class="price">¥5,500</span><span class="duration">60 min</span></div>
-        <p class="desc">2500年の歴史を持つ伝統手技。ストレッチと指圧の融合で、凝り固まった全身を緩やかに解きほぐします。</p>
-      </article>
-      <article class="menu-card">
-        <span class="num">No. 02</span>
-        <h3 class="name-jp">タイ古式マッサージ 90分</h3>
-        <div class="name-en">Traditional Thai · 90min</div>
-        <div class="price-row"><span class="price">¥7,700</span><span class="duration">90 min</span></div>
-        <p class="desc">じっくりと全身を整える人気のスタンダードコース。深いリラックスと体の軽さを実感していただけます。</p>
-      </article>
-      <article class="menu-card">
-        <span class="num">No. 03</span>
-        <h3 class="name-jp">アロマオイルマッサージ 60分</h3>
-        <div class="name-en">Aroma Oil Massage · 60min</div>
-        <div class="price-row"><span class="price">¥6,600</span><span class="duration">60 min</span></div>
-        <p class="desc">厳選アロマオイルを使った、流れるような全身トリートメント。香りと手技で深い癒しを。</p>
-      </article>
-      <article class="menu-card">
-        <span class="num">No. 04</span>
-        <h3 class="name-jp">アロマオイルマッサージ 90分</h3>
-        <div class="name-en">Aroma Oil · 90min</div>
-        <div class="price-row"><span class="price">¥9,350</span><span class="duration">90 min</span></div>
-        <p class="desc">時間をかけて、足先から頭部までゆったりと。眠ってしまうほどの極上のリラックスタイム。</p>
-      </article>
-      <article class="menu-card">
-        <span class="num">No. 05</span>
-        <h3 class="name-jp">ヘッド &amp; フェイスマッサージ 45分</h3>
-        <div class="name-en">Head &amp; Face · 45min</div>
-        <div class="price-row"><span class="price">¥4,950</span><span class="duration">45 min</span></div>
-        <p class="desc">目の疲れ、首肩のこわばり、顔のむくみに。スマホ・PCで疲れた現代人のためのショートコース。</p>
-      </article>
-      <article class="menu-card">
-        <span class="badge">Recommend</span>
-        <span class="num">No. 06</span>
-        <h3 class="name-jp">180分 ロングリラックスコース</h3>
-        <div class="name-en">Long Relax Course · 180min</div>
-        <div class="price-row"><span class="price">¥14,300</span><span class="duration">180 min</span></div>
-        <p class="desc">タイ古式 + アロマ + ヘッドの組み合わせ自由。3時間で全てを忘れる、当店一番の贅沢コース。</p>
-      </article>
+    <div class="menu-grid reveal-stagger" id="menuGrid">
+      <!-- CMS がロード後に書き換える — 価格ゼロのスケルトン表示 -->
+      <div class="menu-skel"></div>
+      <div class="menu-skel"></div>
+      <div class="menu-skel"></div>
+      <div class="menu-skel"></div>
+      <div class="menu-skel"></div>
+      <div class="menu-skel"></div>
     </div>
   </div>
 </section>
@@ -901,6 +864,7 @@ function applyMenu(items) {
   if (!Array.isArray(items) || !items.length) return;
   const grid = document.getElementById('menuGrid');
   if (!grid) return;
+  grid.innerHTML = ''; // スケルトンを即クリア
   grid.innerHTML = items.map((m, i) => {
     const num = String(i + 1).padStart(2, '0');
     const badge = m.bestSeller ? '<span class="badge">Best Seller</span>' : '';
@@ -917,7 +881,6 @@ function applyMenu(items) {
       '<p class="desc">' + esc(m.desc || '') + '</p>' +
     '</article>';
   }).join('');
-  grid.classList.remove('cms-pending');
   observe(grid, '.menu-card');
 }
 
