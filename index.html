@@ -213,7 +213,7 @@
       <h2 class="section-title"><em>選び抜いた</em>6つのメニュー</h2>
       <p class="section-subtitle">コ ー ス ・ メ ニ ュ ー</p>
     </div>
-    <div class="menu-grid reveal-stagger" id="menuGrid">
+    <div class="menu-grid reveal-stagger cms-pending" id="menuGrid">
       <article class="menu-card">
         <span class="badge">Best Seller</span>
         <span class="num">No. 01</span>
@@ -917,6 +917,7 @@ function applyMenu(items) {
       '<p class="desc">' + esc(m.desc || '') + '</p>' +
     '</article>';
   }).join('');
+  grid.classList.remove('cms-pending');
   observe(grid, '.menu-card');
 }
 
@@ -1111,10 +1112,16 @@ function applyCTA(c) {
 }
 
 /* ============================ Fetch CMS ============================ */
+// フォールバック：3秒後でもCMSが返ってこなければ強制表示
+const _cmsFallback = setTimeout(() => {
+  document.querySelectorAll('.cms-pending').forEach(el => el.classList.remove('cms-pending'));
+}, 3000);
+
 if (GAS_URL && GAS_URL.indexOf('http') === 0) {
   fetch(GAS_URL)
     .then(r => r.json())
     .then(data => {
+      clearTimeout(_cmsFallback);
       if (data.settings) applySettings(data.settings);
       if (data.hero)     applyHero(data.hero);
       if (data.about)    applyAbout(data.about);
