@@ -15,9 +15,8 @@ jobs:
           NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
           NETLIFY_SITE_ID: 12931b4d-3553-4849-9290-cb4845ba1019
         run: |
-          zip -r deploy.zip \
-            index.html shared.css favicon.svg \
-            sitemap.xml privacy-policy.html terms.html
+          zip -r deploy.zip . \
+            -x ".git/*" -x ".github/*"
           curl -s -X POST \
             -H "Authorization: Bearer $NETLIFY_TOKEN" \
             -H "Content-Type: application/zip" \
