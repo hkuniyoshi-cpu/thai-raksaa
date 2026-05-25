@@ -853,6 +853,28 @@ section {
 @media (max-width: 480px) { .foryou-grid { grid-template-columns: 1fr; } .foryou-card { aspect-ratio: 5/3; } }
 
 /* ============================ REVIEWS ============================ */
+.review-skel {
+  background: #f3ede6;
+  border: 1px solid rgba(26,26,26,.05);
+  border-radius: 2px;
+  height: 300px;
+  position: relative;
+  overflow: hidden;
+}
+.review-skel::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201,168,76,.08) 40%,
+    rgba(201,168,76,.13) 50%,
+    rgba(201,168,76,.08) 60%,
+    transparent 100%
+  );
+  background-size: 250% 100%;
+  animation: skel-shimmer 2s ease-in-out infinite;
+}
 .reviews-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
