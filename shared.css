@@ -864,6 +864,10 @@ section {
   padding: 30px 28px 28px;
   position: relative;
   transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+  /* カード高さを固定してグリッドを揃える */
+  display: flex;
+  flex-direction: column;
+  height: 300px;
 }
 .review:hover {
   transform: translateY(-4px);
@@ -874,6 +878,7 @@ section {
   font-size: 16px;
   letter-spacing: .15em;
   margin-bottom: 18px;
+  flex-shrink: 0;
 }
 .review .stars .off { color: rgba(26,26,26,.18); }
 .review .body {
@@ -883,12 +888,26 @@ section {
   line-height: 1.95;
   letter-spacing: .04em;
   color: var(--ink);
-  margin: 0 0 24px;
+  margin: 0;
+  /* テキストが溢れたらクリップ＋グラデーションフェード */
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.review .body::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 52px;
+  background: linear-gradient(to bottom, transparent 0%, var(--cream) 100%);
+  pointer-events: none;
 }
 .review .meta {
   display: flex; justify-content: space-between; align-items: baseline;
   padding-top: 18px;
   border-top: 1px solid var(--line);
+  flex-shrink: 0; /* 名前・日付エリアは圧縮しない */
+  margin-top: 0;
 }
 .review .name {
   font-family: var(--serif-jp);
