@@ -1695,3 +1695,89 @@ section + .sec-dark::before {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ============================ Mobile Optimization (≤ 600px) ============================ */
+@media (max-width: 600px) {
+
+  /* --- Nav brand --- */
+  .nav .brand .en {
+    letter-spacing: .14em;
+    font-size: 9px;
+    max-width: calc(100vw - 100px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* --- Hero --- */
+  .hero { padding: 100px 0 56px; }
+
+  .hero-copy .h-eyebrow {
+    font-size: 10px;
+    letter-spacing: .14em;
+    gap: 8px;
+    overflow: hidden;
+  }
+  .hero-copy .h-eyebrow::before { width: 22px; }
+
+  .hero-copy h1 {
+    font-size: clamp(26px, 7.5vw, 36px);
+    overflow-wrap: break-word;
+    word-break: break-all;
+    line-break: auto;
+    letter-spacing: .05em;
+  }
+
+  .hero-copy .h-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .hero-copy .h-actions .btn {
+    justify-content: center;
+    padding: 15px 20px;
+  }
+
+  .hero-copy .h-meta {
+    gap: 16px;
+    margin-top: 28px;
+    padding-top: 22px;
+  }
+
+  .hero-photos {
+    grid-template-rows: 88px 120px 88px;
+    margin-top: 32px;
+  }
+
+  /* --- Section head --- */
+  .section-title {
+    overflow-wrap: break-word;
+    word-break: break-all;
+  }
+  .eyebrow {
+    letter-spacing: .22em;
+    font-size: 11px;
+  }
+
+  /* --- About photos --- */
+  .about-photos {
+    grid-template-rows: 180px 130px;
+  }
+
+  /* --- Features --- */
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+
+  /* --- Access hours table --- */
+  .hours-table td, .hours-table th {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  /* --- General btn sizing --- */
+  .btn {
+    font-size: 13px;
+    letter-spacing: .10em;
+  }
+}
