@@ -1392,6 +1392,13 @@ footer .produced-by a:hover { color: var(--gold); }
    LUXURY ANIMATION SYSTEM — RAKSAA
    =================================================================== */
 
+/* ---- CMS pending — hide fallback content until data arrives ---- */
+.cms-pending {
+  opacity: 0 !important;
+  pointer-events: none;
+  transition: opacity .7s ease !important;
+}
+
 /* ---- Gold particle canvas (fixed, behind content) ---- */
 #raksaa-particles {
   position: fixed; inset: 0;
