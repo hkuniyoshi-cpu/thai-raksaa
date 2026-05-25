@@ -701,6 +701,115 @@ document.querySelectorAll('.faq-q').forEach(q => {
   });
 })();
 
+/* ============================ LUXURY EFFECTS ============================ */
+
+// 1. Gold particle canvas
+(function initParticles() {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'raksaa-particles';
+  document.body.insertBefore(canvas, document.body.firstChild);
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0;
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const COLS = [[201,168,76],[216,190,111],[245,228,140],[158,130,50],[232,208,120]];
+  const MAX  = 110;
+  const pts  = [];
+
+  function mkPt(rnd) {
+    const c = COLS[Math.floor(Math.random() * COLS.length)];
+    const ml = 180 + Math.random() * 280;
+    const p = {
+      x: Math.random() * W,
+      y: rnd ? Math.random() * H : H + 8,
+      vx: (Math.random() - .5) * .55,
+      vy: -(Math.random() * .9 + .3),
+      r: Math.random() * 1.6 + .3,
+      life: rnd ? Math.random() * ml : 0,
+      ml, c, i: Math.random() * Math.PI * 2,
+    };
+    return p;
+  }
+  while (pts.length < MAX) pts.push(mkPt(true));
+
+  let raf;
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    for (let i = 0; i < pts.length; i++) {
+      const p = pts[i];
+      p.life++;
+      p.i += .008;
+      p.x += p.vx + Math.sin(p.i) * .35;
+      p.y += p.vy;
+      const t = p.life / p.ml;
+      const a = t < .18 ? t / .18 : t > .72 ? (1 - t) / .28 : 1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.283);
+      ctx.fillStyle = `rgba(${p.c[0]},${p.c[1]},${p.c[2]},${a * .72})`;
+      ctx.fill();
+      if (p.life >= p.ml || p.y < -12) pts[i] = mkPt(false);
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  tick();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) cancelAnimationFrame(raf); else tick();
+  });
+})();
+
+// 2. Inject aurora into hero, glow+sweep into dark sections, sparkles into hero
+(function injectLuxury() {
+  const hero = document.querySelector('.hero');
+  if (hero) {
+    const aurora = document.createElement('div');
+    aurora.className = 'hero-aurora';
+    hero.insertBefore(aurora, hero.firstChild);
+    // Sparkles
+    for (let i = 0; i < 18; i++) {
+      const sp = document.createElement('div');
+      sp.className = 'sparkle';
+      const dur   = (2.2 + Math.random() * 2.6).toFixed(2) + 's';
+      const delay = (Math.random() * 4).toFixed(2) + 's';
+      sp.style.cssText = `left:${(Math.random() * 88 + 5).toFixed(1)}%;top:${(Math.random() * 75 + 8).toFixed(1)}%;--sp-dur:${dur};--sp-delay:${delay}`;
+      hero.appendChild(sp);
+    }
+  }
+  document.querySelectorAll('.sec-dark').forEach(sec => {
+    const glow  = document.createElement('div'); glow.className  = 'lux-glow';
+    const sweep = document.createElement('div'); sweep.className = 'lux-sweep';
+    sec.insertBefore(glow,  sec.firstChild);
+    sec.insertBefore(sweep, sec.firstChild);
+  });
+  // Gold shimmer on dark-section eyebrows & section-title em
+  document.querySelectorAll('.sec-dark .eyebrow, .sec-dark .section-title em').forEach(el => {
+    el.classList.add('gold-shine');
+  });
+})();
+
+// 3. Image loading — fade-in on load, skeleton via CSS
+(function imgFadeIn() {
+  function track(img) {
+    if (img.dataset.lx) return;
+    img.dataset.lx = '1';
+    img.classList.add('cms-fade');
+    const done = () => img.classList.add('img-loaded');
+    if (img.complete && img.naturalWidth > 0) { done(); return; }
+    img.addEventListener('load',  done, { once: true });
+    img.addEventListener('error', done, { once: true });
+  }
+  const mo = new MutationObserver(muts =>
+    muts.forEach(m => m.addedNodes.forEach(n => {
+      if (n.nodeType !== 1) return;
+      if (n.tagName === 'IMG') track(n);
+      else if (n.querySelectorAll) n.querySelectorAll('img').forEach(track);
+    }))
+  );
+  mo.observe(document.body, { childList: true, subtree: true });
+  document.querySelectorAll('img').forEach(track);
+})();
+
 /* ============================ CMS — GAS Endpoint ============================ */
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzo3Bap0F2Yg7-AagzyyhDMw2YOh2y3ZvnKhgIKCnxpi6XFzGvWLe7twGKb_pDI0V4J/exec';
 
