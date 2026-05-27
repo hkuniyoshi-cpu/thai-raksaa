@@ -757,6 +757,14 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbzo3Bap0F2Yg7-AagzyyhDM
 
 function applySettings(s) {
   if (!s) return;
+  // 全 settings をグローバルに保持（applyReviews のCTAカードでGBP URL参照用）
+  window._settings = s;
+  // GBP URL の正規化（複数のキー名候補に対応）
+  if (!s.gbpUrl) {
+    s.gbpUrl = s['GoogleビジネスプロフィールURL'] || s['Googleビジネスプロフィール'] ||
+               s['GoogleビジネスURL'] || s['gbpUrl'] || s['GBP_URL'] ||
+               'https://www.google.com/search?q=%E3%82%BF%E3%82%A4%E5%8F%A4%E5%BC%8F+RAKSAA';
+  }
   // 店名 / 英語店名は基本ハードコード。CMS 上書きを許可する場合のみ反映
   if (s['店名']) {
     document.querySelectorAll('.brand .jp, .foot-brand .jp').forEach(el => el.textContent = s['店名']);
@@ -899,7 +907,7 @@ function applyReviews(items) {
   if (!Array.isArray(items) || !items.length) return;
   const grid = document.getElementById('reviewsGrid');
   if (!grid) return;
-  grid.innerHTML = items.map(r =>
+  let html = items.map(r =>
     '<article class="review">' +
       '<div class="stars">' + stars(r.stars) + '</div>' +
       '<p class="body">' + esc(r.text || '') + '</p>' +
@@ -909,6 +917,17 @@ function applyReviews(items) {
       '</div>' +
     '</article>'
   ).join('');
+  // Google Places API は最大5件なので、6件目を「Googleでもっと見る」CTAで埋める
+  // → グリッドの見た目を整え、かつクチコミ投稿への動線にもなる（MEO効果）
+  if (items.length < 6) {
+    const gbpUrl = (window._settings && window._settings.gbpUrl) || '#';
+    html += '<a class="review review-cta" href="' + esc(gbpUrl) + '" target="_blank" rel="noopener">' +
+              '<div class="review-cta-stars">★ ★ ★ ★ ★</div>' +
+              '<p class="review-cta-msg">他のクチコミも<br>Googleでご覧いただけます</p>' +
+              '<span class="review-cta-link">Googleで見る →</span>' +
+            '</a>';
+  }
+  grid.innerHTML = html;
 }
 
 function applyBlog(items) {
