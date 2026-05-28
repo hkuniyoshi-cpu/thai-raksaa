@@ -938,7 +938,19 @@ function applyBlog(items) {
   if (!valid.length) return;
   window._blogItems = valid;
   wall.innerHTML = valid.map((b, i) => {
-    const rawTitle   = b.title || b.body || '';
+    // タイトルロジック：
+    //   1. Sheets C列（b.title）に明示的なタイトルがあればそれを使用
+    //   2. 空なら、本文から「文末まで or 句点まで」の最初の1文を抽出（最大44文字）
+    //   3. それも無理なら日付＋「の投稿」
+    let rawTitle = (b.title || '').trim();
+    if (!rawTitle && b.body) {
+      // 本文の最初の1文（句点 or 改行まで）を抽出
+      const firstSentence = String(b.body).split(/[。\n]/)[0] || '';
+      rawTitle = firstSentence.trim();
+    }
+    if (!rawTitle && b.date) {
+      rawTitle = `${fmtDate(b.date)} の投稿`;
+    }
     const shortTitle = rawTitle.length > 44 ? rawTitle.slice(0, 44) + '…' : rawTitle;
     const imgUrl = b.image;
     const blogHref = (b.url && b.url.includes('/blog/'))
