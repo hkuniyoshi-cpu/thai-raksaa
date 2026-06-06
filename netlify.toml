@@ -1,2 +1,7 @@
 [build]
   publish = "."
+
+[[redirects]]
+  from = "/blog/*"
+  to = "/blog/index.html"
+  status = 200
