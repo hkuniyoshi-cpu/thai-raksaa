@@ -56,6 +56,7 @@
     "closes": "25:00"
   }],
   "sameAs": [
+    "https://www.thai-raksaa.com/",
     "https://page.line.me/488ifvtd",
     "https://beauty.hotpepper.jp/kr/slnH000738209/"
   ],
@@ -579,7 +580,7 @@
 <div class="partner-divider" aria-hidden="true">◆</div>
 <div class="partner-notice">
   <p>このサイトは SearchMania Inc. が タイ古式 RAKSAA（ラクサー）と提携して制作・運営するパートナーサイトです。</p>
-  <a id="partnerLink" href="#" target="_blank" rel="noopener noreferrer">Google ビジネスプロフィールはこちら &nbsp;→</a>
+  <a id="partnerLink" href="https://www.thai-raksaa.com/" target="_blank" rel="noopener noreferrer">公式サイトはこちら &nbsp;→</a>
 </div>
 
 <!-- ============================ SCRIPTS ============================ -->
@@ -772,10 +773,16 @@ function applySettings(s) {
                s['GoogleビジネスURL'] || s['gbpUrl'] || s['GBP_URL'] ||
                'https://www.google.com/search?q=%E3%82%BF%E3%82%A4%E5%8F%A4%E5%BC%8F+RAKSAA';
   }
-  // パートナーサイト表示バーの「Google ビジネスプロフィール」リンクに gbpUrl を注入
+  // 公式サイトURL の正規化（複数キー名候補に対応）
+  if (!s.officialUrl) {
+    s.officialUrl = s['公式サイトURL'] || s['公式サイト'] || s['officialUrl'] ||
+                    s['OfficialURL'] || 'https://www.thai-raksaa.com/';
+  }
+  // パートナーサイト表示バーの「公式サイトはこちら」リンクに officialUrl を注入
+  // （CMSで公式サイトURLを編集すれば即時反映される）
   const partnerLink = document.getElementById('partnerLink');
-  if (partnerLink && s.gbpUrl) {
-    partnerLink.href = s.gbpUrl;
+  if (partnerLink && s.officialUrl) {
+    partnerLink.href = s.officialUrl;
   }
   // 店名 / 英語店名は基本ハードコード。CMS 上書きを許可する場合のみ反映
   if (s['店名']) {
