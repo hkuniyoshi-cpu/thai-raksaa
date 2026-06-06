@@ -575,6 +575,12 @@
   </div>
 </footer>
 
+<!-- ============================ PARTNER NOTICE ============================ -->
+<div class="partner-notice">
+  <p>このサイトは SearchMania Inc. が タイ古式 RAKSAA（ラクサー）と提携して制作・運営するパートナーサイトです。</p>
+  <a id="partnerLink" href="#" target="_blank" rel="noopener noreferrer">Google ビジネスプロフィールはこちら &nbsp;→</a>
+</div>
+
 <!-- ============================ SCRIPTS ============================ -->
 <script>
 /* ============================ Utils ============================ */
@@ -764,6 +770,11 @@ function applySettings(s) {
     s.gbpUrl = s['GoogleビジネスプロフィールURL'] || s['Googleビジネスプロフィール'] ||
                s['GoogleビジネスURL'] || s['gbpUrl'] || s['GBP_URL'] ||
                'https://www.google.com/search?q=%E3%82%BF%E3%82%A4%E5%8F%A4%E5%BC%8F+RAKSAA';
+  }
+  // パートナーサイト表示バーの「Google ビジネスプロフィール」リンクに gbpUrl を注入
+  const partnerLink = document.getElementById('partnerLink');
+  if (partnerLink && s.gbpUrl) {
+    partnerLink.href = s.gbpUrl;
   }
   // 店名 / 英語店名は基本ハードコード。CMS 上書きを許可する場合のみ反映
   if (s['店名']) {
