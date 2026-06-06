@@ -1533,23 +1533,36 @@ footer .produced-by a {
 }
 footer .produced-by a:hover { color: var(--gold); }
 
-/* ============================ Partner Notice（パートナーサイト表示バー） ============================ */
+/* ============================ Partner Notice（footer と同色で一体化） ============================ */
+
+/* ◆ 装飾セパレーター（footerと partner-notice の間に）*/
+.partner-divider {
+  background: #0B0A09;
+  text-align: center;
+  padding: 18px 0 4px;
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 0;
+  opacity: 0.55;
+  user-select: none;
+}
+
+/* 本体 — footer と同じ #0B0A09 でシームレスに繋ぐ */
 .partner-notice {
-  background: rgba(0, 0, 0, 0.55);
-  border-top: 1px solid rgba(201, 168, 76, 0.18);
-  padding: 16px clamp(20px, 5vw, 80px);
+  background: #0B0A09;
+  padding: 18px clamp(20px, 5vw, 80px) 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.6em;
+  gap: 1.8em;
   flex-wrap: wrap;
-  text-align: center;
 }
 .partner-notice p {
   font-family: var(--sans-jp);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: rgba(232, 224, 212, 0.45);
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  line-height: 1.75;
+  color: rgba(232, 224, 212, 0.32);
   margin: 0;
   flex: 1;
   min-width: 240px;
@@ -1557,13 +1570,14 @@ footer .produced-by a:hover { color: var(--gold); }
 }
 .partner-notice a {
   font-family: var(--serif-ac);
-  font-size: 12px;
-  letter-spacing: 0.22em;
+  font-size: 11px;
+  letter-spacing: 0.26em;
   color: rgba(201, 168, 76, 0.7);
   text-decoration: none;
   white-space: nowrap;
-  padding: 10px 26px;
-  border: 1px solid rgba(201, 168, 76, 0.4);
+  padding: 11px 28px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  text-transform: uppercase;
   transition: all 0.35s var(--ease);
 }
 .partner-notice a:hover {
@@ -1572,17 +1586,16 @@ footer .produced-by a:hover { color: var(--gold); }
   border-color: var(--gold);
 }
 @media (max-width: 600px) {
+  .partner-divider { padding: 14px 0 2px; font-size: 12px; }
   .partner-notice {
     flex-direction: column;
-    gap: 12px;
-    text-align: center;
-    padding: 18px 20px;
+    gap: 14px;
+    padding: 14px 22px 28px;
   }
   .partner-notice p {
     text-align: center;
     min-width: 0;
-    font-size: 11.5px;
-    line-height: 1.7;
+    font-size: 11px;
   }
   .partner-notice a {
     width: 100%;
