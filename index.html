@@ -972,9 +972,9 @@ function applyBlog(items) {
     }
     const shortTitle = rawTitle.length > 44 ? rawTitle.slice(0, 44) + '…' : rawTitle;
     const imgUrl = b.image;
-    const blogHref = (b.url && b.url.includes('/blog/'))
-      ? b.url
-      : (b.date ? `/blog/${b.date}/` : null);
+    const slugMatch = (b.url || '').match(/\/blog\/([^\/\?#]+)/);
+    const postSlug  = slugMatch ? slugMatch[1] : (b.date || '');
+    const blogHref  = postSlug ? `/blog/?post=${postSlug}` : null;
     const tagOpen  = blogHref
       ? `<a href="${blogHref}" class="e blog-card reveal">`
       : `<article class="e blog-card reveal" role="button" tabindex="0" data-idx="${i}">`;
