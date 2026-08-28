@@ -947,6 +947,47 @@ function applyReviews(items) {
             '</a>';
   }
   grid.innerHTML = html;
+  injectReviewsSchema(items);
+}
+
+// SEO/AIO: Google クチコミを Schema.org Review + AggregateRating として JSON-LD 注入
+function injectReviewsSchema(items) {
+  if (!Array.isArray(items) || !items.length) return;
+  var valid = items.filter(function(r){ return r && r.text; });
+  if (!valid.length) return;
+  var canonical = ((document.querySelector('link[rel="canonical"]') || {}).href) || (location.origin + '/');
+  var siteName = ((document.querySelector('meta[property="og:site_name"]') || {}).content) || document.title.split(/[|｜]/)[0].trim();
+  var bizId = canonical.replace(/\/$/, '') + '/#business';
+  var top5 = valid.slice(0, 5).map(function(r){
+    return {
+      '@type':'Review',
+      'author':{'@type':'Person','name':String(r.name || 'Anonymous')},
+      'datePublished':String(r.date || ''),
+      'reviewBody':String(r.text || ''),
+      'reviewRating':{'@type':'Rating','ratingValue':String(r.stars || 5),'bestRating':'5','worstRating':'1'},
+      'publisher':{'@type':'Organization','name':'Google','url':'https://www.google.com/maps'},
+      'itemReviewed':{'@id':bizId}
+    };
+  });
+  var totalScore = valid.reduce(function(sum, r){ return sum + (Number(r.stars) || 5); }, 0);
+  var avg = (totalScore / valid.length).toFixed(1);
+  var aggregate = {
+    '@type':'AggregateRating',
+    'itemReviewed':{'@id':bizId,'@type':'LocalBusiness','name':siteName,'url':canonical},
+    'ratingValue':String(avg),
+    'bestRating':'5',
+    'worstRating':'1',
+    'ratingCount':String(valid.length),
+    'reviewCount':String(valid.length)
+  };
+  var sc = document.getElementById('reviews-ldjson');
+  if (!sc) {
+    sc = document.createElement('script');
+    sc.type = 'application/ld+json';
+    sc.id = 'reviews-ldjson';
+    document.head.appendChild(sc);
+  }
+  sc.textContent = JSON.stringify({'@context':'https://schema.org','@graph':[aggregate].concat(top5)});
 }
 
 function applyBlog(items) {
